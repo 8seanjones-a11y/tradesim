@@ -1,0 +1,23 @@
+# UNVERIFIED.
+firm: FTMO
+program: 1-Step 100K
+asset_class: forex
+account_size: 100000
+fee: 540
+fee_type: one_time
+day_tz: Europe/Prague
+day_roll_hour: 0
+verified_at: null
+phases:
+  - name: challenge
+    kind: evaluation
+    profit_target: 0.10
+    target_unit: pct
+    max_loss: {amount: 0.10, unit: pct, type: trailing, trail_mode: eod_balance, lock_at: start_balance}
+    daily_loss: {amount: 0.03, unit: pct, basis: equity, breach_action: fail}
+    consistency: [{metric: best_day_over_profit, max_ratio: 0.5, effect: block_pass}]
+  - name: funded
+    kind: funded
+    max_loss: {amount: 0.10, unit: pct, type: trailing, trail_mode: eod_balance, lock_at: start_balance}
+    daily_loss: {amount: 0.03, unit: pct, basis: equity, breach_action: fail}
+    payout: {min_days: 10, max_pct_of_profit: 1.0, caps: [], split: 0.8}

@@ -1,0 +1,30 @@
+# UNVERIFIED.
+firm: FundedNext
+program: Stellar 2-Step 100K
+asset_class: forex
+account_size: 100000
+fee: 549
+fee_type: one_time
+day_tz: Etc/GMT-2
+day_roll_hour: 0
+verified_at: null
+phases:
+  - name: phase1
+    kind: evaluation
+    profit_target: 0.08
+    target_unit: pct
+    max_loss: {amount: 0.10, unit: pct, type: static}
+    daily_loss: {amount: 0.05, unit: pct, basis: equity, breach_action: fail}
+    min_trading_days: 5
+  - name: phase2
+    kind: evaluation
+    profit_target: 0.05
+    target_unit: pct
+    max_loss: {amount: 0.10, unit: pct, type: static}
+    daily_loss: {amount: 0.05, unit: pct, basis: equity, breach_action: fail}
+    min_trading_days: 5
+  - name: funded
+    kind: funded
+    max_loss: {amount: 0.10, unit: pct, type: static}
+    daily_loss: {amount: 0.05, unit: pct, basis: equity, breach_action: fail}
+    payout: {min_days: 5, max_pct_of_profit: 1.0, caps: [], split: 0.8}

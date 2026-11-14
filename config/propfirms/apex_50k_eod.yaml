@@ -1,0 +1,28 @@
+# UNVERIFIED (Apex 4.0 rules, Mar 2026, per public summaries). Check apextraderfunding.com.
+firm: Apex
+program: 50K EOD
+asset_class: futures
+account_size: 50000
+fee: 147
+fee_type: one_time
+activation_fee: 0
+day_tz: America/New_York
+day_roll_hour: 17
+verified_at: null
+notes: "Safety net = start + DD + 100. Payout caps escalate. Automation reportedly not allowed - check before trading a bot."
+phases:
+  - name: evaluation
+    kind: evaluation
+    profit_target: 3000
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    daily_loss: {amount: 1000, basis: equity, breach_action: pause_day}
+    min_trading_days: 1
+    max_contracts: 6
+  - name: pa_funded
+    kind: funded
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    daily_loss: {amount: 1000, basis: equity, breach_action: pause_day}
+    max_contracts: 6
+    payout: {safety_net: 2100, min_days: 5, min_day_profit: 250, max_pct_of_profit: 1.0, min_amount: 500,
+             caps: [1500, 1500, 2000, 2500, 2500, 3000], split: 1.0,
+             consistency: {metric: best_day_over_profit, max_ratio: 0.5, effect: block_payout}}

@@ -1,0 +1,27 @@
+# UNVERIFIED. Test uses EOD trailing; PRO uses intraday trailing.
+firm: TakeProfitTrader
+program: 50K Test -> PRO
+asset_class: futures
+account_size: 50000
+fee: 170
+fee_type: monthly
+activation_fee: 130
+day_tz: America/New_York
+day_roll_hour: 17
+verified_at: null
+phases:
+  - name: test
+    kind: evaluation
+    profit_target: 3000
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_balance}
+    daily_loss: {amount: 1100, basis: equity, breach_action: pause_day}
+    consistency: [{metric: best_day_over_profit, max_ratio: 0.5, effect: block_pass}]
+    min_trading_days: 5
+    max_contracts: 6
+    flat_by_eod: true
+  - name: pro
+    kind: funded
+    max_loss: {amount: 2000, type: trailing, trail_mode: intraday_equity, lock_at: start_balance}
+    max_contracts: 6
+    flat_by_eod: true
+    payout: {safety_net: 2000, min_days: 1, max_pct_of_profit: 1.0, caps: [], split: 0.8}

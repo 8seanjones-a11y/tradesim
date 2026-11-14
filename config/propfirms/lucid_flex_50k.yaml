@@ -1,0 +1,23 @@
+# UNVERIFIED.
+firm: Lucid
+program: Flex 50K
+asset_class: futures
+account_size: 50000
+fee: 130
+fee_type: one_time
+day_tz: America/New_York
+day_roll_hour: 17
+verified_at: null
+phases:
+  - name: evaluation
+    kind: evaluation
+    profit_target: 3000
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    consistency: [{metric: best_day_over_profit, max_ratio: 0.5, effect: block_pass}]
+    min_trading_days: 2
+    max_contracts: 4
+  - name: funded
+    kind: funded
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    max_contracts: 4
+    payout: {min_days: 5, min_day_profit: 150, max_pct_of_profit: 0.5, caps: [2000], split: 0.9}

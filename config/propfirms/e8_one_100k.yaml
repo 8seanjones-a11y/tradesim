@@ -1,0 +1,22 @@
+# UNVERIFIED. E8 One lets the trader choose target/drawdown; defaults shown.
+firm: E8
+program: E8 One 100K
+asset_class: forex
+account_size: 100000
+fee: 588
+fee_type: one_time
+day_tz: Etc/GMT-2
+day_roll_hour: 0
+verified_at: null
+phases:
+  - name: evaluation
+    kind: evaluation
+    profit_target: 0.09
+    target_unit: pct
+    max_loss: {amount: 0.06, unit: pct, type: trailing, trail_mode: eod_balance, lock_at: start_balance}
+    daily_loss: {amount: 0.04, unit: pct, basis: equity, breach_action: fail}
+  - name: funded
+    kind: funded
+    max_loss: {amount: 0.06, unit: pct, type: trailing, trail_mode: eod_balance, lock_at: start_balance}
+    daily_loss: {amount: 0.04, unit: pct, basis: equity, breach_action: fail}
+    payout: {min_days: 8, max_pct_of_profit: 1.0, caps: [], split: 0.8}

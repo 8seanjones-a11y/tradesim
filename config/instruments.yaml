@@ -1,0 +1,45 @@
+# Contract / instrument specs.
+#   point_value: P&L in account currency per 1.0 price move per 1 unit (futures multiplier; 1 for spot)
+#   tick_size:   minimum price increment
+#   lot_step:    smallest tradable size increment (1 = whole contracts; 0 = continuous)
+#   commission_per_unit: per side, per unit (futures: per contract round-half)
+#   commission_pct:      per side, fraction of notional (stocks/crypto)
+#   half_spread: price units added adversely to each fill (FX/CFD); 0 if data already bid/ask aware
+#   carry_per_day: holding cost as fraction of notional per day (swap / funding / borrow); sign-agnostic cost
+#   source / source_symbol: which data adapter + symbol to pull
+#   proxy_for: set when the price series is a stand-in for the real contract
+
+defaults:
+  futures: {lot_step: 1, commission_per_unit: 2.25, commission_pct: 0.0, half_spread: 0.0, carry_per_day: 0.0}
+  forex:   {lot_step: 1000, commission_per_unit: 0.000035, commission_pct: 0.0, carry_per_day: 0.00002}
+  stocks:  {point_value: 1, lot_step: 1, commission_per_unit: 0.0, commission_pct: 0.0, half_spread: 0.01, carry_per_day: 0.0}
+  crypto:  {point_value: 1, lot_step: 0, commission_per_unit: 0.0, commission_pct: 0.0005, half_spread: 0.0, carry_per_day: 0.0003}
+
+instruments:
+  # ---- Futures (intraday via Dukascopy CFD proxies; daily via yfinance continuous) ----
+  ES:  {asset_class: futures, point_value: 50,   tick_size: 0.25,  source: dukascopy, source_symbol: USA500IDXUSD, price_divisor: 1000, proxy_for: "CME E-mini S&P 500", daily_source: yfinance, daily_symbol: "ES=F"}
+  MES: {asset_class: futures, point_value: 5,    tick_size: 0.25,  commission_per_unit: 0.62, source: dukascopy, source_symbol: USA500IDXUSD, price_divisor: 1000, proxy_for: "CME Micro E-mini S&P 500", daily_source: yfinance, daily_symbol: "MES=F"}
+  NQ:  {asset_class: futures, point_value: 20,   tick_size: 0.25,  source: dukascopy, source_symbol: USATECHIDXUSD, price_divisor: 1000, proxy_for: "CME E-mini Nasdaq-100", daily_source: yfinance, daily_symbol: "NQ=F"}
+  MNQ: {asset_class: futures, point_value: 2,    tick_size: 0.25,  commission_per_unit: 0.62, source: dukascopy, source_symbol: USATECHIDXUSD, price_divisor: 1000, proxy_for: "CME Micro E-mini Nasdaq-100", daily_source: yfinance, daily_symbol: "MNQ=F"}
+  YM:  {asset_class: futures, point_value: 5,    tick_size: 1.0,   source: dukascopy, source_symbol: USA30IDXUSD, price_divisor: 1000, proxy_for: "CBOT E-mini Dow", daily_source: yfinance, daily_symbol: "YM=F"}
+  CL:  {asset_class: futures, point_value: 1000, tick_size: 0.01,  source: dukascopy, source_symbol: LIGHTCMDUSD, price_divisor: 1000, proxy_for: "NYMEX WTI Crude", daily_source: yfinance, daily_symbol: "CL=F"}
+  GC:  {asset_class: futures, point_value: 100,  tick_size: 0.10,  source: dukascopy, source_symbol: XAUUSD, price_divisor: 1000, proxy_for: "COMEX Gold", daily_source: yfinance, daily_symbol: "GC=F"}
+
+  # ---- Forex (Dukascopy 1m). Units = base currency units; point_value 1 => P&L in quote ccy ----
+  EURUSD: {asset_class: forex, point_value: 1, tick_size: 0.00001, half_spread: 0.00004, source: dukascopy, source_symbol: EURUSD, price_divisor: 100000}
+  GBPUSD: {asset_class: forex, point_value: 1, tick_size: 0.00001, half_spread: 0.00006, source: dukascopy, source_symbol: GBPUSD, price_divisor: 100000}
+  AUDUSD: {asset_class: forex, point_value: 1, tick_size: 0.00001, half_spread: 0.00006, source: dukascopy, source_symbol: AUDUSD, price_divisor: 100000}
+  USDJPY: {asset_class: forex, point_value: 1, tick_size: 0.001,   half_spread: 0.006,   source: dukascopy, source_symbol: USDJPY, price_divisor: 1000, quote_ccy: JPY}
+  XAUUSD: {asset_class: forex, point_value: 1, tick_size: 0.001,   half_spread: 0.15,  lot_step: 1, source: dukascopy, source_symbol: XAUUSD, price_divisor: 1000}
+
+  # ---- Stocks / ETFs ----
+  SPY: {asset_class: stocks, tick_size: 0.01, source: alpaca, source_symbol: SPY, daily_source: yfinance, daily_symbol: SPY}
+  QQQ: {asset_class: stocks, tick_size: 0.01, source: alpaca, source_symbol: QQQ, daily_source: yfinance, daily_symbol: QQQ}
+  IWM: {asset_class: stocks, tick_size: 0.01, source: alpaca, source_symbol: IWM, daily_source: yfinance, daily_symbol: IWM}
+  AAPL: {asset_class: stocks, tick_size: 0.01, source: alpaca, source_symbol: AAPL, daily_source: yfinance, daily_symbol: AAPL}
+
+  # ---- Crypto (Binance public data) ----
+  BTCUSDT: {asset_class: crypto, tick_size: 0.01, source: binance, source_symbol: BTCUSDT, market: spot}
+  ETHUSDT: {asset_class: crypto, tick_size: 0.01, source: binance, source_symbol: ETHUSDT, market: spot}
+  SOLUSDT: {asset_class: crypto, tick_size: 0.01, source: binance, source_symbol: SOLUSDT, market: spot}
+  BTCUSDT_PERP: {asset_class: crypto, tick_size: 0.1, source: binance, source_symbol: BTCUSDT, market: um}

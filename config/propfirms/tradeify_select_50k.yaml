@@ -1,0 +1,23 @@
+# UNVERIFIED.
+firm: Tradeify
+program: Select 50K
+asset_class: futures
+account_size: 50000
+fee: 159
+fee_type: one_time
+day_tz: America/New_York
+day_roll_hour: 17
+verified_at: null
+phases:
+  - name: evaluation
+    kind: evaluation
+    profit_target: 2500
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    consistency: [{metric: best_day_over_profit, max_ratio: 0.4, effect: block_pass}]
+    min_trading_days: 3
+    max_contracts: 4
+  - name: funded
+    kind: funded
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    max_contracts: 4
+    payout: {min_days: 5, min_day_profit: 0, max_pct_of_profit: 0.5, min_amount: 250, caps: [2000], split: 0.9}

@@ -1,0 +1,22 @@
+# UNVERIFIED. Plan lineup changes frequently.
+firm: MyFundedFutures
+program: Rapid 50K
+asset_class: futures
+account_size: 50000
+fee: 129
+fee_type: monthly
+day_tz: America/New_York
+day_roll_hour: 17
+verified_at: null
+phases:
+  - name: evaluation
+    kind: evaluation
+    profit_target: 3000
+    max_loss: {amount: 2000, type: trailing, trail_mode: eod_balance, lock_at: start_plus_x, lock_offset: 100}
+    min_trading_days: 1
+    max_contracts: 5
+  - name: funded
+    kind: funded
+    max_loss: {amount: 2000, type: trailing, trail_mode: intraday_equity, lock_at: start_plus_x, lock_offset: 100}
+    max_contracts: 5
+    payout: {safety_net: 2100, min_days: 1, max_pct_of_profit: 1.0, min_amount: 500, caps: [], split: 0.9}
